@@ -16,7 +16,7 @@ video ─┬─ cắt khung 1 khung/giây ─ lọc trùng ─┐
 | Lọc khung trùng | Tỉ lệ pixel lệch độ sáng trên thumbnail 160×90; giữ thêm khung cuối trước khi màn hình đổi | [selectFrame](../src/core/frame-dedupe.js#L27) `current` |
 | Video không decode được | Thử ffmpeg.wasm một luồng; hỏng nữa thì báo cách đổi định dạng trên iPhone | [ffmpegFrames](../src/web/video-frames.js#L92) `current` |
 | Audio | `decodeAudioData` → resample 16kHz mono; file > 150MB thì bỏ qua audio | [decodeAudioTo16k](../src/web/audio-pcm.js#L23) `current` |
-| Speech-to-text | Gemini Transcribe nếu có key, lỗi/không key → Whisper; cả hai hỏng → bỏ audio | [transcribe](../src/core/speech-to-text.js#L99) `current` |
+| Speech-to-text | Chỉ chạy khi bật "Video có bài nghe" trong ⚙️ (mặc định tắt). Gemini Transcribe nếu có key, lỗi/không key → Whisper; cả hai hỏng → bỏ audio | [transcribe](../src/core/speech-to-text.js#L99) `current` |
 | Whisper trong trình duyệt | Web Worker + transformers.js từ jsdelivr; có `onerror` và timeout im lặng | [whisperInWorker](../src/web/whisper-client.js#L10) `current` |
 | Gọi Claude | fetch + SSE, thinking adaptive, JSON schema; 429/529 retry có backoff, 401 báo sai key | [callClaude](../src/core/claude-client.js#L123) `current` |
 | A. Trích câu hỏi | Chia lô ≤ 80 khung/request, gộp theo số câu | [extractQuestions](../src/core/extract-questions.js#L117) `current` |

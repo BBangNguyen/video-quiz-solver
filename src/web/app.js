@@ -19,7 +19,7 @@ const el = (tag, props = {}, children = []) => {
 };
 
 // ── Cài đặt (localStorage) ────────────────────────────────────────────────
-const SETTING_KEYS = { claudeKey: 'vqs.claudeKey', geminiKey: 'vqs.geminiKey', mode: 'vqs.mode' };
+const SETTING_KEYS = { claudeKey: 'vqs.claudeKey', geminiKey: 'vqs.geminiKey', mode: 'vqs.mode', listening: 'vqs.listening' };
 const readSetting = (name) => {
   try {
     return localStorage.getItem(SETTING_KEYS[name]) ?? '';
@@ -128,6 +128,10 @@ async function framesTask(file) {
 }
 
 async function audioTask(file) {
+  if (readSetting('listening') !== '1') {
+    setStep('audio', 'skipped', 'Đã tắt "Video có bài nghe" trong ⚙️ — chỉ giải theo hình', 'Bỏ qua audio');
+    return { transcript: '', engine: 'none', notes: [] };
+  }
   setStep('audio', 'active');
   try {
     const { pcm, warning } = await decodeAudioTo16k(file);
@@ -370,13 +374,14 @@ async function refreshHomeNotice() {
 function openSettings(message = '') {
   $('input-claude-key').value = readSetting('claudeKey');
   $('input-gemini-key').value = readSetting('geminiKey');
+  $('input-listening').checked = readSetting('listening') === '1';
   $('settings-status').textContent = message;
   show('settings');
 }
 
 function saveSettings(event) {
   event.preventDefault();
-  const ok = writeSetting('claudeKey', $('input-claude-key').value.trim()) && writeSetting('geminiKey', $('input-gemini-key').value.trim());
+  const ok = writeSetting('claudeKey', $('input-claude-key').value.trim()) && writeSetting('geminiKey', $('input-gemini-key').value.trim()) && writeSetting('listening', $('input-listening').checked ? '1' : '');
   if (!ok) return ($('settings-status').textContent = 'Không lưu được: trình duyệt đang chặn bộ nhớ (chế độ riêng tư?).');
   toast('Đã lưu cài đặt');
   show('home');

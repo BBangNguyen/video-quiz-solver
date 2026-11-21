@@ -118,6 +118,21 @@ test('video không có tiếng → bỏ qua audio, vẫn ra kết quả', async 
   await expect(page.locator('#result-cost')).toContainText('không dùng audio');
 });
 
+test('tắt "Video có bài nghe" → không đụng tới audio dù có key Gemini', async ({ page }) => {
+  const calls = await mockClaude(page);
+  const gemini = await mockGemini(page);
+  await openApp(page, { geminiKey: 'test-gemini-key', mode: 'fast', listening: '' });
+  await pickVideo(page);
+  await expect(page.locator('#result-total')).toHaveText('Tổng: 2 câu');
+  expect(gemini).toHaveLength(0);
+  expect(JSON.stringify(calls[0].body.messages[0].content)).toContain('The video has no usable speech transcript.');
+  await page.locator('#nav-settings').tap();
+  await expect(page.locator('#input-listening')).not.toBeChecked();
+  await page.locator('#input-listening').check();
+  await page.locator('#settings-form button[type="submit"]').tap();
+  expect(await page.evaluate(() => localStorage.getItem('vqs.listening'))).toBe('1');
+});
+
 test('có key Gemini → transcript có mốc [mm:ss] được gửi kèm cho Claude', async ({ page }, testInfo) => {
   needsAudioDecode(testInfo);
   const calls = await mockClaude(page);

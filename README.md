@@ -30,6 +30,8 @@ Key chỉ nằm trong `localStorage` của trình duyệt trên máy bạn và c
 
 ### Gemini API key (không bắt buộc, miễn phí)
 
+Mặc định app **bỏ qua audio**, chỉ giải theo hình. Đề có bài nghe thì bật **Video có bài nghe** trong ⚙️.
+
 Claude không nhận audio, nên phần nghe cần một bước chuyển giọng nói thành chữ:
 
 - **Có key Gemini:** dùng model `gemini-3.5-transcribe` gói miễn phí — nhanh và nhẹ máy.

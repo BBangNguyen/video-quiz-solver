@@ -90,16 +90,17 @@ export async function stubWhisper(page) {
 
 export const blockCdns = (page) => Promise.all(['https://cdn.jsdelivr.net/**', 'https://huggingface.co/**', 'https://*.hf.co/**'].map((url) => page.route(url, (route) => route.abort('blockedbyclient'))));
 
-export async function openApp(page, { claudeKey = 'test-claude-key', geminiKey = '', mode = 'accurate' } = {}) {
+export async function openApp(page, { claudeKey = 'test-claude-key', geminiKey = '', mode = 'accurate', listening = '1' } = {}) {
   await page.addInitScript(
-    ([c, g, m]) => {
+    ([c, g, m, l]) => {
       if (localStorage.getItem('vqs.seeded')) return;
       localStorage.setItem('vqs.seeded', '1');
       localStorage.setItem('vqs.claudeKey', c);
       localStorage.setItem('vqs.geminiKey', g);
       localStorage.setItem('vqs.mode', m);
+      localStorage.setItem('vqs.listening', l);
     },
-    [claudeKey, geminiKey, mode],
+    [claudeKey, geminiKey, mode, listening],
   );
   page.on('dialog', (dialog) => {
     throw new Error(`App không được dùng alert/confirm/prompt: ${dialog.message()}`);

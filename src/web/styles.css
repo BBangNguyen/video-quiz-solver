@@ -127,6 +127,10 @@ h2 { font-size: 22px; letter-spacing: -0.02em; margin: 10px 0 16px; }
 .field input { width: 100%; min-height: 54px; padding: 0 14px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--panel); color: var(--text); font: 16px var(--mono); }
 .field input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(214, 242, 79, 0.14); }
 .field small { color: var(--muted); font-size: 13px; line-height: 1.45; }
+.toggle { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: start; min-height: 48px; cursor: pointer; }
+.toggle input { width: 24px; height: 24px; margin: 2px 0 0; accent-color: var(--accent); }
+.toggle span { display: grid; gap: 4px; }
+.toggle small { color: var(--muted); font-size: 13px; line-height: 1.45; }
 .form-status { min-height: 1.5em; margin: 0; color: var(--accent); font-weight: 600; }
 
 /* ── Tiến độ ──────────────────────────────── */

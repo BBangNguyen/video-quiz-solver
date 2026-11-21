@@ -69,6 +69,10 @@
             <input id="input-claude-key" type="password" inputmode="text" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="sk-ant-…" />
             <small>Lấy tại console.anthropic.com. Key chỉ lưu trên máy này (localStorage) và chỉ gửi tới api.anthropic.com.</small>
           </label>
+          <label class="toggle">
+            <input id="input-listening" type="checkbox" />
+            <span><b>Video có bài nghe</b><small>Tắt thì app bỏ qua audio, chỉ giải theo hình — nhanh hơn, không phải tải Whisper.</small></span>
+          </label>
           <label class="field">
             <span>Gemini API key <i>không bắt buộc</i></span>
             <input id="input-gemini-key" type="password" inputmode="text" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="AIza…" />
