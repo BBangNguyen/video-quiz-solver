@@ -16,7 +16,7 @@
 | Lọc khung trên trình duyệt khớp bản Node | `current` | Playwright trên cả hai profile: `small-change` 12 khung, `scroll` 18, `fill-blank` 4 — bằng đúng số của ffmpeg/Node |
 | Video mẫu + script eval | `current` | 6 video, 33 câu trong [`eval/answers.json`](../eval/answers.json); `npm run eval -- --dry` chạy được |
 | Đo độ chính xác bằng Claude thật | `building` | Chưa chạy — chưa có `ANTHROPIC_API_KEY` trong `.env` |
-| Deploy GitHub Pages | `building` | Chưa tạo repo — chờ chủ repo đồng ý tên và chế độ public |
+| Deploy GitHub Pages | `current` | <https://bbangnguyen.github.io/video-quiz-solver/> — 2026-11-21: mọi file trong `SHELL` của `sw.js` trả 200, service worker đăng ký được, mở lại được khi offline (Chromium) |
 | Duyệt giao diện bằng mắt | `building` | Ảnh chụp ở [`docs/review/assets/`](review/assets/), chờ chủ repo xem |
 
 ## Quyết định đã chốt với chủ repo
