@@ -22,7 +22,7 @@ test('Chính xác: quay video → tổng số câu, đáp án từng dòng, bấ
   await pickVideo(page);
 
   await expect(page.locator('#result-total')).toHaveText('Tổng: 2 câu');
-  expect(await answerLines(page)).toEqual(['1. B', '2. went']);
+  expect(await answerLines(page)).toEqual(['1. B. goes', '2. went']);
   expect(calls.map((c) => c.kind).sort()).toEqual(['extract', 'opus', 'sonnet']);
 
   // Request trích: header gọi thẳng từ trình duyệt, khung hình có nhãn thời gian, cú pháp thinking/structured output hiện hành
@@ -46,7 +46,7 @@ test('Chính xác: quay video → tổng số câu, đáp án từng dòng, bấ
   if (!isWebKit(testInfo)) await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.locator('#btn-copy').tap();
   await expect(page.locator('#toast')).toHaveText('Đã copy đáp án');
-  if (!isWebKit(testInfo)) expect((await page.evaluate(() => navigator.clipboard.readText())).replace(/\r/g, '')).toBe('Tổng: 2 câu\n1. B\n2. went'); // Windows tự đổi \n → \r\n
+  if (!isWebKit(testInfo)) expect((await page.evaluate(() => navigator.clipboard.readText())).replace(/\r/g, '')).toBe('Tổng: 2 câu\n1. B. goes\n2. went'); // Windows tự đổi \n → \r\n
 
   // Lịch sử lưu trong IndexedDB: còn nguyên sau khi tải lại trang
   await page.reload();
@@ -66,7 +66,7 @@ test('Chính xác: hai model lệch nhau → gọi trọng tài, câu không ch�
   await openApp(page);
   await pickVideo(page);
   await expect(page.locator('#result-total')).toHaveText('Tổng: 2 câu');
-  expect(await answerLines(page)).toEqual(['1. B', '2. went (?)']);
+  expect(await answerLines(page)).toEqual(['1. B. goes', '2. went (?)']);
   const referee = calls.find((c) => c.kind === 'referee');
   expect(referee.body.model).toBe('claude-opus-5-5');
   expect(referee.body.messages[0].content.at(-1).text).toContain('Solver 2: "gone"');
@@ -178,7 +178,7 @@ test('rớt mạng giữa chừng rồi mở lại → chạy tiếp từ bướ
   await page.reload(); // như khi khoá máy / đổi app rồi trình duyệt tải lại trang
   await expect(page.locator('#result-total')).toHaveText('Tổng: 2 câu');
   expect(calls.filter((c) => c.kind === 'extract'), 'bước trích lấy từ IndexedDB').toHaveLength(1);
-  expect(await answerLines(page)).toEqual(['1. B', '2. went']);
+  expect(await answerLines(page)).toEqual(['1. B. goes', '2. went']);
 });
 
 test('video HEVC trình duyệt không decode được → fallback ffmpeg.wasm vẫn ra kết quả', async ({ page }) => {

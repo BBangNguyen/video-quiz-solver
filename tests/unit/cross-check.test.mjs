@@ -73,11 +73,16 @@ test('finalizeSingle (chế độ Nhanh): (?) khi confidence low hoặc thiếu 
   assert.deepEqual(out.map((r) => [r.answer, r.uncertain]), [['B', false], ['C', true], ['', true]]);
 });
 
-test('formatAnswerSheet: dòng đầu là tổng số câu, sau đó mỗi câu một dòng', () => {
-  const sheet = formatAnswerSheet([
-    { number: '1', answer: 'B', uncertain: false },
-    { number: '2', answer: 'went', uncertain: true },
-    { number: '3', answer: '', uncertain: true },
-  ]);
-  assert.equal(sheet, 'Tổng: 3 câu\n1. B\n2. went (?)\n3. (?)');
+test('formatAnswerSheet: dòng đầu là tổng số câu, trắc nghiệm kèm nội dung lựa chọn sau chữ cái', () => {
+  const sheet = formatAnswerSheet(
+    [
+      { number: '1', answer: 'B', uncertain: false },
+      { number: '2', answer: 'went', uncertain: true },
+      { number: '3', answer: '', uncertain: true },
+      { number: '4', answer: 'gone', uncertain: false },
+      { number: '5', answer: 'D', uncertain: false },
+    ],
+    [mcq('1'), fill('2'), mcq('3'), mcq('4'), mcq('5')],
+  );
+  assert.equal(sheet, 'Tổng: 5 câu\n1. B. went\n2. went (?)\n3. (?)\n4. C. gone\n5. D');
 });

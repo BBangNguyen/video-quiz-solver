@@ -86,12 +86,21 @@ export function finalizeCrossChecked(questions, answersA, answersB, refereeAnswe
   });
 }
 
-/** Dòng hiển thị: "1. B", "2. went (?)". */
-export function formatAnswerLine(result) {
-  const answer = result.answer || '';
+/** Trắc nghiệm: "B" / "goes" / "(b)" → "B. goes"; câu điền từ hoặc không khớp lựa chọn nào thì giữ nguyên. */
+export function displayAnswer(answer, question) {
+  const text = answer || '';
+  const label = normalizeAnswer(text, question);
+  const option = label && question?.options?.find((o) => o.label.trim().toLowerCase().replace(/[().:]/g, '') === label);
+  return option ? `${option.label}. ${option.text}` : text;
+}
+
+/** Dòng hiển thị: "1. B. goes", "2. went (?)". */
+export function formatAnswerLine(result, question) {
+  const answer = displayAnswer(result.answer, question);
   return `${result.number}. ${answer}${result.uncertain ? `${answer ? ' ' : ''}(?)` : ''}`;
 }
 
-export function formatAnswerSheet(results) {
-  return [`Tổng: ${results.length} câu`, ...results.map(formatAnswerLine)].join('\n');
+export function formatAnswerSheet(results, questions = []) {
+  const byNum = new Map(questions.map((q) => [q.number, q]));
+  return [`Tổng: ${results.length} câu`, ...results.map((r) => formatAnswerLine(r, byNum.get(r.number)))].join('\n');
 }

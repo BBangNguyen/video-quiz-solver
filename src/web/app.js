@@ -3,7 +3,7 @@
 import { MODES } from '../core/constants.js';
 import { ClaudeError, callClaude } from '../core/claude-client.js';
 import { formatUsd } from '../core/cost.js';
-import { formatAnswerSheet } from '../core/cross-check.js';
+import { displayAnswer, formatAnswerSheet } from '../core/cross-check.js';
 import { runPipeline } from '../core/pipeline.js';
 import { transcribe } from '../core/speech-to-text.js';
 import { decodeAudioTo16k } from './audio-pcm.js';
@@ -285,7 +285,7 @@ async function cancelJob() {
 function answerRow(result, question, passage, index) {
   const summary = el('summary', {}, [
     el('span', { className: 'num', textContent: `${result.number}.` }),
-    el('span', { className: 'ans' }, [result.answer, ...(result.uncertain ? [' ', el('span', { className: 'unsure', textContent: '(?)' })] : [])]),
+    el('span', { className: 'ans' }, [displayAnswer(result.answer, question), ...(result.uncertain ? [' ', el('span', { className: 'unsure', textContent: '(?)' })] : [])]),
   ]);
   const questionText = question ? [question.text, ...question.options.map((o) => `${o.label}. ${o.text}`)].join('\n') : '(không có nội dung câu hỏi)';
   const detail = el('div', { className: 'detail' }, [
@@ -316,7 +316,7 @@ function showResult(entry) {
 }
 
 async function copyAnswers() {
-  const text = formatAnswerSheet(shownResult.results);
+  const text = formatAnswerSheet(shownResult.results, shownResult.questions);
   try {
     await navigator.clipboard.writeText(text);
   } catch {
