@@ -1,0 +1,65 @@
+{
+  "mcq-grammar.mp4": {
+    "note": "Trắc nghiệm ngữ pháp, mỗi câu một màn hình, có giọng đọc câu hỏi",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "C",
+      "5": "B"
+    }
+  },
+  "fill-blank.mp4": {
+    "note": "Điền từ, 3 câu mỗi màn hình, video KHÔNG có tiếng",
+    "answers": {
+      "1": "went",
+      "2": "written",
+      "3": "are playing",
+      "4": "in",
+      "5": "taller",
+      "6": "any"
+    }
+  },
+  "reading.mp4": {
+    "note": "Đọc hiểu: một màn hình đoạn văn, sau đó câu hỏi; không có tiếng",
+    "answers": {
+      "1": "B",
+      "2": "B",
+      "3": "False",
+      "4": "A"
+    }
+  },
+  "listening.mp4": {
+    "note": "Đề nghe: màn hình chỉ có câu hỏi, đáp án CHỈ nằm trong audio",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "Baker"
+    }
+  },
+  "small-change.mp4": {
+    "note": "Ứng dụng quiz 1080p: khung giao diện đứng yên, chỉ một vùng chữ nhỏ đổi mỗi 3 giây",
+    "answers": {
+      "1": "A",
+      "2": "B",
+      "3": "B",
+      "4": "C",
+      "5": "C",
+      "6": "C"
+    }
+  },
+  "scroll.mp4": {
+    "note": "Quay màn hình điện thoại dọc, cuộn qua một trang 8 câu",
+    "answers": {
+      "1": "B",
+      "2": "A",
+      "3": "C",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "B"
+    }
+  }
+}

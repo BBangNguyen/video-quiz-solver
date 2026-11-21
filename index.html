@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0d10" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Giải đề" />
+    <title>Giải đề từ video</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="src/web/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <button class="brand" id="nav-home" type="button" aria-label="Về trang chính">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-name">Giải đề<em>từ video</em></span>
+      </button>
+      <nav class="topbar-actions">
+        <button class="icon-btn" id="nav-history" type="button" aria-label="Lịch sử">🕘</button>
+        <button class="icon-btn" id="nav-settings" type="button" aria-label="Cài đặt">⚙️</button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Trang chính -->
+      <section id="view-home" class="view">
+        <div class="scanner" aria-hidden="true">
+          <div class="scanner-sheet">
+            <span><i>1.</i> B</span><span><i>2.</i> went</span><span><i>3.</i> C</span>
+            <span><i>4.</i> True</span><span class="is-unsure"><i>5.</i> A (?)</span><span><i>6.</i> D</span>
+          </div>
+          <div class="scanner-beam"></div>
+        </div>
+        <h1>Quay đề tiếng Anh,<br />nhận đáp án từng câu.</h1>
+        <p class="lede">Trắc nghiệm, điền từ, đọc hiểu, đề nghe. Video được xử lý ngay trên máy bạn rồi gửi thẳng tới Claude.</p>
+
+        <div id="home-notice" class="notice" hidden></div>
+
+        <fieldset class="mode">
+          <legend class="sr-only">Chế độ giải</legend>
+          <label><input type="radio" name="mode" value="accurate" checked /><span><b>🎯 Chính xác</b><small>2 model đối chiếu + trọng tài</small></span></label>
+          <label><input type="radio" name="mode" value="fast" /><span><b>⚡ Nhanh</b><small>1 lượt, rẻ hơn</small></span></label>
+        </fieldset>
+
+        <div class="actions">
+          <label class="btn btn-primary" id="btn-record">
+            <input id="input-record" class="sr-only" type="file" accept="video/*" capture="environment" />
+            <span>📷 Quay video</span>
+          </label>
+          <label class="btn btn-ghost" id="btn-pick">
+            <input id="input-pick" class="sr-only" type="file" accept="video/*" />
+            <span>🖼️ Chọn từ máy</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Cài đặt -->
+      <section id="view-settings" class="view" hidden>
+        <h2>⚙️ Cài đặt</h2>
+        <form id="settings-form" class="form" autocomplete="off">
+          <label class="field">
+            <span>Claude API key <b>bắt buộc</b></span>
+            <input id="input-claude-key" type="password" inputmode="text" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="sk-ant-…" />
+            <small>Lấy tại console.anthropic.com. Key chỉ lưu trên máy này (localStorage) và chỉ gửi tới api.anthropic.com.</small>
+          </label>
+          <label class="field">
+            <span>Gemini API key <i>không bắt buộc</i></span>
+            <input id="input-gemini-key" type="password" inputmode="text" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="AIza…" />
+            <small>Dùng để nghe audio (gói miễn phí). Bỏ trống thì app tự nghe bằng Whisper ngay trong trình duyệt. Lưu ý: dữ liệu gửi lên Gemini gói free có thể được Google dùng để cải thiện sản phẩm.</small>
+          </label>
+          <button class="btn btn-primary" type="submit"><span>Lưu</span></button>
+          <p id="settings-status" class="form-status" role="status"></p>
+        </form>
+      </section>
+
+      <!-- Tiến độ -->
+      <section id="view-progress" class="view" hidden>
+        <div class="progress-head">
+          <h2 id="progress-title">Đang xử lý…</h2>
+          <div class="clock" aria-label="Thời gian đã chạy"><span id="clock">0</span><small>giây</small></div>
+        </div>
+        <ol class="steps" id="steps">
+          <li data-step="frames"><span class="dot"></span><div><b>Đang cắt khung hình</b><small></small></div></li>
+          <li data-step="audio"><span class="dot"></span><div><b>Đang nghe audio</b><small></small></div></li>
+          <li data-step="extract"><span class="dot"></span><div><b>Đang trích câu hỏi</b><small></small></div></li>
+          <li data-step="solve"><span class="dot"></span><div><b>Đang giải</b><small></small></div></li>
+          <li data-step="crosscheck"><span class="dot"></span><div><b>Đang đối chiếu</b><small></small></div></li>
+        </ol>
+        <p class="keep-awake">☀️ Giữ màn hình mở trong lúc xử lý. Lỡ khoá máy hay đổi app, mở lại là chạy tiếp từ bước đang dở.</p>
+        <div id="progress-error" class="notice notice-error" role="alert" hidden></div>
+        <div class="actions">
+          <button class="btn btn-primary" id="btn-retry" type="button" hidden><span>Thử lại</span></button>
+          <button class="btn btn-ghost" id="btn-cancel" type="button"><span>Huỷ</span></button>
+        </div>
+      </section>
+
+      <!-- Kết quả -->
+      <section id="view-result" class="view" hidden>
+        <p class="eyebrow" id="result-meta"></p>
+        <h2 class="total" id="result-total"></h2>
+        <div id="result-notes"></div>
+        <ol class="answers" id="answers"></ol>
+        <div class="sticky-actions">
+          <button class="btn btn-primary" id="btn-copy" type="button"><span>📋 Copy đáp án</span></button>
+        </div>
+        <p class="cost" id="result-cost"></p>
+        <div class="actions">
+          <button class="btn btn-ghost" id="btn-again" type="button"><span>Giải video khác</span></button>
+        </div>
+      </section>
+
+      <!-- Lịch sử -->
+      <section id="view-history" class="view" hidden>
+        <h2>🕘 Lịch sử</h2>
+        <ul class="history" id="history-list"></ul>
+        <p id="history-empty" class="lede" hidden>Chưa có kết quả nào được lưu.</p>
+        <div class="actions">
+          <button class="btn btn-ghost" id="btn-clear-history" type="button" hidden><span>Xoá lịch sử</span></button>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    <script type="module" src="src/web/app.js"></script>
+  </body>
+</html>
